@@ -33,7 +33,6 @@
       flex-direction: column;
     }
 
-    /* Tela de Bloqueio */
     #lock-screen {
       position: fixed; inset: 0;
       background-color: var(--bg);
@@ -66,7 +65,6 @@
     .lock-btn:hover { background: var(--primary-hover); }
     .lock-err { color: var(--danger); font-size: 12px; margin-top: 10px; display: none; }
 
-    /* Painel Principal */
     #app-container { display: none; flex-direction: column; flex: 1; }
     header {
       background: var(--card); border-bottom: 1px solid var(--border);
@@ -75,12 +73,11 @@
     }
     .brand { display: flex; align-items: center; gap: 14px; }
     .header-logo { height: 42px; width: auto; object-fit: contain; }
-    .brand h1 { font-size: 18px; font-weight: 700; display: none; }
+    .brand h1 { font-size: 18px; font-weight: 700; }
     .brand span { font-size: 11px; background: rgba(56,189,248,0.15); color: var(--primary); padding: 3px 10px; border-radius: 12px; font-weight: 600; }
 
     .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-    /* Barra de Pesquisa */
     .search-box { position: relative; display: flex; align-items: center; }
     .search-box i { position: absolute; left: 12px; color: var(--text-muted); font-size: 13px; }
     .search-input {
@@ -91,7 +88,6 @@
 
     main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 24px 16px; }
 
-    /* Botões */
     .btn-action {
       background: var(--primary); color: #040812; border: none;
       padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 13px;
@@ -107,7 +103,6 @@
     .btn-secondary-action:hover { background: rgba(255, 255, 255, 0.15); }
     .btn-secondary-action.active-sort { border-color: var(--primary); color: var(--primary); }
 
-    /* Categorias */
     .category-group {
       margin-bottom: 28px; background: rgba(12, 21, 41, 0.5);
       border: 1px solid var(--border); border-radius: 14px; padding: 20px;
@@ -132,7 +127,6 @@
     .btn-cat-tool:hover { color: var(--text); }
     .btn-cat-tool.del:hover { color: var(--danger); }
 
-    /* Cards */
     .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
     .panel-card {
       background: var(--card); border: 1px solid var(--border);
@@ -171,7 +165,6 @@
     }
     .btn-open:hover { background: var(--primary); color: #040812; }
 
-    /* Modais */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
       display: none; align-items: center; justify-content: center; z-index: 10000;
@@ -204,7 +197,7 @@
   <!-- Tela de Bloqueio -->
   <div id="lock-screen">
     <div class="lock-card">
-      <img id="lock-logo-img" src="arquivos/Logo.png" alt="Logo" class="lock-logo" onerror="this.style.display='none'">
+      <img id="lock-logo-img" src="./arquivos/Logo.png" alt="Logo" class="lock-logo" onerror="this.style.display='none'">
       <h2 id="lock-brand-name">Acesso Restrito</h2>
       <p>Introduza a senha do sistema</p>
       <form onsubmit="autenticar(event)">
@@ -219,12 +212,11 @@
   <div id="app-container">
     <header>
       <div class="brand">
-        <img id="header-logo-img" src="arquivos/Logo.png" alt="Logo" class="header-logo" onerror="this.nextElementSibling.style.display='block'">
+        <img id="header-logo-img" src="./arquivos/Logo.png" alt="Logo" class="header-logo" onerror="this.nextElementSibling.style.display='block'">
         <h1 id="header-brand-title">Mundo Digital</h1>
         <span id="header-brand-badge">Acesso Rápido</span>
       </div>
       <div class="header-actions">
-        <!-- Barra de Pesquisa -->
         <div class="search-box">
           <i class="fa-solid fa-magnifying-glass"></i>
           <input type="text" id="input-pesquisa" class="search-input" placeholder="Pesquisar painel..." oninput="filtrarPaineis()">
@@ -247,7 +239,6 @@
     <main id="main-content"></main>
   </div>
 
-  <!-- Input Oculto para Importar Backup -->
   <input type="file" id="file-import" accept=".json,.txt" style="display:none;" onchange="processarArquivoImportado(event)">
 
   <!-- Modal: Configurações & Backup -->
@@ -258,55 +249,58 @@
         
         <div class="config-section-title">Identidade Visual</div>
         <div class="form-group">
-          <label>Nome / Título da Empresa</label>
+          <label>Nome da Empresa</label>
           <input type="text" id="cfg-nome" required>
         </div>
         <div class="form-group">
-          <label>Subtítulo / Etiqueta do Cabeçalho</label>
+          <label>Etiqueta do Cabeçalho</label>
           <input type="text" id="cfg-badge" required>
         </div>
         <div class="form-group">
-          <label>Caminho da Logo (Relativo no GitHub ou URL)</label>
-          <input type="text" id="cfg-logo" placeholder="arquivos/Logo.png">
+          <label>Caminho da Logo</label>
+          <input type="text" id="cfg-logo" placeholder="./arquivos/Logo.png">
         </div>
         <div class="form-group">
-          <label>Caminho do Fundo (Relativo no GitHub ou URL)</label>
-          <input type="text" id="cfg-fundo" placeholder="arquivos/fundo.png">
+          <label>Caminho do Fundo</label>
+          <input type="text" id="cfg-fundo" placeholder="./arquivos/fundo.png">
         </div>
 
         <div class="config-section-title">Segurança</div>
         <div class="form-group">
-          <label>Nova Senha de Acesso</label>
+          <label>Senha de Acesso</label>
           <input type="password" id="cfg-senha" required>
         </div>
 
-        <div class="config-section-title">Backup e Restauração</div>
+        <div class="config-section-title">Sincronização & Backup</div>
+        <button type="button" class="btn-action" onclick="forcarSincronizacaoRemota()" style="width:100%; justify-content:center; margin-bottom:10px;">
+          <i class="fa-solid fa-arrows-rotate"></i> Forçar Sincronização do data.json
+        </button>
         <div class="backup-buttons">
           <button type="button" class="btn-secondary-action" onclick="exportarBackup()" style="justify-content:center;">
-            <i class="fa-solid fa-download"></i> Exportar Dados
+            <i class="fa-solid fa-download"></i> Exportar JSON
           </button>
           <button type="button" class="btn-secondary-action" onclick="document.getElementById('file-import').click()" style="justify-content:center;">
-            <i class="fa-solid fa-upload"></i> Importar Dados
+            <i class="fa-solid fa-upload"></i> Importar JSON
           </button>
         </div>
 
         <div class="modal-actions">
           <button type="button" class="btn-secondary" onclick="fecharModal('modal-config')">Cancelar</button>
-          <button type="submit" class="btn-action">Salvar Configurações</button>
+          <button type="submit" class="btn-action">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Modal: Criar/Editar Categoria -->
+  <!-- Modal: Categoria -->
   <div class="modal-overlay" id="modal-categoria">
     <div class="modal">
-      <h3 id="cat-modal-title">Criar Nova Categoria</h3>
+      <h3 id="cat-modal-title">Criar Categoria</h3>
       <form onsubmit="salvarCategoria(event)">
         <input type="hidden" id="cat-edit-id">
         <div class="form-group">
           <label>Nome da Categoria</label>
-          <input type="text" id="cat-nome" placeholder="Ex: Painéis IPTV, Ferramentas" required>
+          <input type="text" id="cat-nome" required>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn-secondary" onclick="fecharModal('modal-categoria')">Cancelar</button>
@@ -316,10 +310,10 @@
     </div>
   </div>
 
-  <!-- Modal: Criar/Editar Painel -->
+  <!-- Modal: Painel -->
   <div class="modal-overlay" id="modal-painel">
     <div class="modal">
-      <h3 id="panel-modal-title">Adicionar Novo Painel</h3>
+      <h3 id="panel-modal-title">Adicionar Painel</h3>
       <form onsubmit="salvarPainel(event)">
         <input type="hidden" id="p-edit-id">
         <div class="form-group">
@@ -328,20 +322,19 @@
         </div>
         <div class="form-group">
           <label>Nome</label>
-          <input type="text" id="p-nome" placeholder="Ex: Painel Principal, WhatsApp" required>
+          <input type="text" id="p-nome" required>
         </div>
         <div class="form-group">
           <label>Descrição</label>
-          <input type="text" id="p-desc" placeholder="Ex: Linhas e ativações">
+          <input type="text" id="p-desc">
         </div>
         <div class="form-group">
           <label>URL de Acesso</label>
-          <input type="url" id="p-url" placeholder="https://..." required>
+          <input type="url" id="p-url" required>
         </div>
         <div class="form-group">
-          <label>Logo Customizada (Ex: arquivos/foto.png, URL ou ícone FontAwesome)</label>
-          <input type="text" id="p-logo" placeholder="Ex: arquivos/KvipNet.jpeg ou fa-solid fa-tv">
-          <small style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">Deixe vazio para usar o favicon automático do site.</small>
+          <label>Logo / Imagem (Ex: ./arquivos/KvipNet.jpeg ou fa-solid fa-tv)</label>
+          <input type="text" id="p-logo">
         </div>
         <div class="modal-actions">
           <button type="button" class="btn-secondary" onclick="fecharModal('modal-painel')">Cancelar</button>
@@ -352,13 +345,12 @@
   </div>
 
   <script>
-    // Configurações padrão com caminhos relativos ao repositório
     let config = {
       senha: "kalleb7e",
       nome: "Mundo Digital",
       badge: "Acesso Rápido",
-      logo: "arquivos/Logo.png",
-      fundo: "arquivos/fundo.png"
+      logo: "./arquivos/Logo.png",
+      fundo: "./arquivos/fundo.png"
     };
 
     let modoOrdem = parseInt(localStorage.getItem('md_ordem_modo')) || 0;
@@ -366,53 +358,61 @@
     let categorias = [];
     let paineis = [];
 
-    // Função para sanitizar caminhos locais do Linux para o GitHub Pages
-    function sanitizarCaminho(caminho) {
+    function normalizarCaminho(caminho) {
       if (!caminho) return "";
-      if (caminho.startsWith("/home/pai/Painel-Novo/arquivos/")) {
-        return caminho.replace("/home/pai/Painel-Novo/arquivos/", "arquivos/");
+      let c = caminho.replace(/^(\/home\/pai\/Painel-Novo\/arquivos\/|\/home\/pai\/Imagens\/|\/arquivos\/)/, "arquivos/");
+      if (c.startsWith("arquivos/")) {
+        c = "./" + c;
       }
-      if (caminho.startsWith("/home/pai/Imagens/")) {
-        return caminho.replace("/home/pai/Imagens/", "arquivos/");
-      }
-      return caminho;
+      return c;
     }
 
-    // Carregamento inicial: Busca data.json na raiz do repositório
-    async function inicializarDados() {
-      // 1. Tenta carregar do data.json da branch main
+    async function buscarDataJson() {
+      const resposta = await fetch('./data.json?t=' + Date.now());
+      if (!resposta.ok) throw new Error("Não foi possível aceder ao data.json");
+      const dados = await resposta.json();
+      
+      categorias = dados.categorias || [];
+      paineis = dados.paineis || [];
+      if (dados.config) config = { ...config, ...dados.config };
+
+      config.logo = normalizarCaminho(config.logo);
+      config.fundo = normalizarCaminho(config.fundo);
+      paineis.forEach(p => p.logo = normalizarCaminho(p.logo));
+      
+      persistir();
+    }
+
+    async function forcarSincronizacaoRemota() {
       try {
-        const resposta = await fetch('data.json?t=' + Date.now());
-        if (resposta.ok) {
-          const dadosRemotos = await resposta.json();
-          if (dadosRemotos.categorias && dadosRemotos.paineis) {
-            // Se ainda não existir nada no localStorage ou se o usuário estiver abrindo agora
-            if (!localStorage.getItem('md_paineis_v4')) {
-              categorias = dadosRemotos.categorias;
-              paineis = dadosRemotos.paineis;
-              if (dadosRemotos.config) {
-                config = { ...config, ...dadosRemotos.config };
-              }
-              // Ajusta caminhos para a web
-              config.logo = sanitizarCaminho(config.logo);
-              config.fundo = sanitizarCaminho(config.fundo);
-              paineis.forEach(p => p.logo = sanitizarCaminho(p.logo));
-              persistir();
-            }
-          }
-        }
+        await buscarDataJson();
+        fecharModal('modal-config');
+        alert("Sincronização concluída com sucesso a partir do data.json!");
       } catch (e) {
-        console.log("data.json local/remoto não encontrado ou inacessível, usando localStorage.");
+        alert("Erro ao sincronizar: " + e.message);
+      }
+    }
+
+    async function inicializarDados() {
+      const dadosSalvos = localStorage.getItem('md_paineis_v4');
+      
+      // Se não há dados ou se só tem 1 item antigo de teste, carrega obrigatoriamente do data.json
+      if (!dadosSalvos || JSON.parse(dadosSalvos).length <= 1) {
+        try {
+          await buscarDataJson();
+          return;
+        } catch (e) {
+          console.warn("Ficheiro data.json não encontrado localmente:", e);
+        }
       }
 
-      // 2. Carrega do localStorage caso já tenha alterações salvas
       if (localStorage.getItem('md_config')) config = JSON.parse(localStorage.getItem('md_config'));
       if (localStorage.getItem('md_categorias')) categorias = JSON.parse(localStorage.getItem('md_categorias'));
       if (localStorage.getItem('md_paineis_v4')) paineis = JSON.parse(localStorage.getItem('md_paineis_v4'));
 
-      config.logo = sanitizarCaminho(config.logo);
-      config.fundo = sanitizarCaminho(config.fundo);
-      paineis.forEach(p => p.logo = sanitizarCaminho(p.logo));
+      config.logo = normalizarCaminho(config.logo);
+      config.fundo = normalizarCaminho(config.fundo);
+      paineis.forEach(p => p.logo = normalizarCaminho(p.logo));
 
       aplicarEstilosConfig();
       renderizarTudo();
@@ -469,7 +469,6 @@
       renderizarTudo();
     }
 
-    /* Modal de Configurações */
     function abrirModalConfig() {
       document.getElementById('cfg-nome').value = config.nome;
       document.getElementById('cfg-badge').value = config.badge;
@@ -483,8 +482,8 @@
       e.preventDefault();
       config.nome = document.getElementById('cfg-nome').value.trim();
       config.badge = document.getElementById('cfg-badge').value.trim();
-      config.logo = sanitizarCaminho(document.getElementById('cfg-logo').value.trim());
-      config.fundo = sanitizarCaminho(document.getElementById('cfg-fundo').value.trim());
+      config.logo = normalizarCaminho(document.getElementById('cfg-logo').value.trim());
+      config.fundo = normalizarCaminho(document.getElementById('cfg-fundo').value.trim());
       config.senha = document.getElementById('cfg-senha').value;
       
       persistir();
@@ -492,7 +491,6 @@
       alert("Configurações atualizadas!");
     }
 
-    /* Backup */
     function exportarBackup() {
       const backupData = {
         config: config,
@@ -522,31 +520,28 @@
         try {
           const dados = JSON.parse(e.target.result);
           if (dados.categorias && dados.paineis) {
-            if (confirm("Importar este arquivo substituirá as categorias e painéis atuais. Deseja continuar?")) {
-              categorias = dados.categorias;
-              paineis = dados.paineis;
-              if (dados.config) config = { ...config, ...dados.config };
-              
-              config.logo = sanitizarCaminho(config.logo);
-              config.fundo = sanitizarCaminho(config.fundo);
-              paineis.forEach(p => p.logo = sanitizarCaminho(p.logo));
+            categorias = dados.categorias;
+            paineis = dados.paineis;
+            if (dados.config) config = { ...config, ...dados.config };
+            
+            config.logo = normalizarCaminho(config.logo);
+            config.fundo = normalizarCaminho(config.fundo);
+            paineis.forEach(p => p.logo = normalizarCaminho(p.logo));
 
-              persistir();
-              fecharModal('modal-config');
-              alert("Dados importados com sucesso!");
-            }
+            persistir();
+            fecharModal('modal-config');
+            alert("Dados importados com sucesso!");
           } else {
-            alert("Formato de arquivo inválido!");
+            alert("Formato de ficheiro inválido!");
           }
         } catch (err) {
-          alert("Erro ao ler o arquivo JSON: " + err.message);
+          alert("Erro ao ler ficheiro: " + err.message);
         }
       };
       reader.readAsText(file);
       event.target.value = '';
     }
 
-    /* Gestão de Categorias */
     function abrirModalNovaCategoria() {
       document.getElementById('cat-edit-id').value = '';
       document.getElementById('cat-nome').value = '';
@@ -581,14 +576,13 @@
     }
 
     function removerCategoria(catId) {
-      if (confirm("Deseja remover esta categoria? Os atalhos associados a ela também serão excluídos.")) {
+      if (confirm("Eliminar esta categoria e todos os seus atalhos?")) {
         categorias = categorias.filter(c => c.id !== catId);
         paineis = paineis.filter(p => p.categoriaId !== catId);
         persistir();
       }
     }
 
-    /* Gestão de Painéis */
     function preencherSelectCategorias(selectedId = '') {
       const select = document.getElementById('p-categoria');
       select.innerHTML = '';
@@ -600,7 +594,7 @@
 
     function abrirModalNovoPainel() {
       if (categorias.length === 0) {
-        alert("Crie pelo menos uma categoria antes de adicionar um painel.");
+        alert("Crie primeiro uma categoria.");
         abrirModalNovaCategoria();
         return;
       }
@@ -634,7 +628,7 @@
       const nome = document.getElementById('p-nome').value.trim();
       const desc = document.getElementById('p-desc').value.trim() || "Atalho";
       const url = document.getElementById('p-url').value.trim();
-      const logo = sanitizarCaminho(document.getElementById('p-logo').value.trim());
+      const logo = normalizarCaminho(document.getElementById('p-logo').value.trim());
 
       if (id) {
         const p = paineis.find(item => item.id === Number(id));
@@ -662,7 +656,7 @@
     }
 
     function removerPainel(id) {
-      if (confirm("Pretende remover este painel?")) {
+      if (confirm("Eliminar este painel?")) {
         paineis = paineis.filter(p => p.id !== id);
         persistir();
       }
@@ -809,7 +803,6 @@
       }
     }
 
-    // Inicializa carregando os dados do data.json
     inicializarDados();
   </script>
 </body>
