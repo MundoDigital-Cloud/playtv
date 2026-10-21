@@ -33,7 +33,6 @@
       flex-direction: column;
     }
 
-    /* Tela de Bloqueio */
     #lock-screen {
       position: fixed; inset: 0;
       background-color: var(--bg);
@@ -67,7 +66,6 @@
     .lock-btn:hover { background: var(--primary-hover); }
     .lock-err { color: var(--danger); font-size: 13px; margin-top: 12px; display: none; font-weight: 500; }
 
-    /* App Container */
     #app-container { display: none; flex-direction: column; flex: 1; }
     
     header {
@@ -86,7 +84,6 @@
 
     .header-actions { display: flex; gap: 8px; align-items: center; width: 100%; }
 
-    /* Barra de Pesquisa */
     .search-box { position: relative; display: flex; align-items: center; flex: 1; }
     .search-box i { position: absolute; left: 12px; color: var(--text-muted); font-size: 13px; }
     .search-input {
@@ -97,7 +94,6 @@
 
     .action-buttons-group { display: flex; gap: 6px; }
 
-    /* Botões */
     .btn-action, .btn-secondary-action {
       padding: 10px 12px; border-radius: 8px; font-weight: 600; font-size: 13px;
       cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;
@@ -111,7 +107,6 @@
 
     main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 16px 12px; }
 
-    /* Categorias */
     .category-group {
       margin-bottom: 24px; background: rgba(12, 21, 41, 0.6);
       border: 1px solid var(--border); border-radius: 14px; padding: 16px;
@@ -136,7 +131,6 @@
     .btn-cat-tool:hover { color: var(--text); }
     .btn-cat-tool.del:hover { color: var(--danger); }
 
-    /* Cards */
     .grid-cards { display: grid; grid-template-columns: 1fr; gap: 12px; }
     .panel-card {
       background: var(--card); border: 1px solid var(--border);
@@ -176,7 +170,6 @@
     }
     .btn-open:hover { background: var(--primary); color: #040812; }
 
-    /* Modais */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
       display: none; align-items: center; justify-content: center; z-index: 10000;
@@ -244,7 +237,7 @@
       <img id="lock-logo-img" src="./arquivos/Logo.png" alt="Logo" class="lock-logo" onerror="this.style.display='none'">
       <h2 id="lock-brand-name">Acesso Restrito</h2>
       <p>Introduza a senha do sistema</p>
-      <form onsubmit="autenticar(event)">
+      <form id="form-auth">
         <input type="password" id="pass" class="lock-input" placeholder="Senha..." autofocus required>
         <button type="submit" class="lock-btn">Entrar</button>
         <div id="lock-err" class="lock-err">Senha incorreta!</div>
@@ -467,18 +460,22 @@
     }
 
     function aplicarEstilosConfig() {
-      document.getElementById('page-title').innerText = `${config.nome} - ${config.badge}`;
-      document.getElementById('header-brand-title').innerText = config.nome;
-      document.getElementById('header-brand-badge').innerText = config.badge;
+      const pageTitle = document.getElementById('page-title');
+      const brandTitle = document.getElementById('header-brand-title');
+      const brandBadge = document.getElementById('header-brand-badge');
+      if (pageTitle) pageTitle.innerText = `${config.nome} - ${config.badge}`;
+      if (brandTitle) brandTitle.innerText = config.nome;
+      if (brandBadge) brandBadge.innerText = config.badge;
       
       const logoHeader = document.getElementById('header-logo-img');
       const logoLock = document.getElementById('lock-logo-img');
-      logoHeader.src = config.logo;
-      logoLock.src = config.logo;
+      if (logoHeader) logoHeader.src = config.logo;
+      if (logoLock) logoLock.src = config.logo;
 
       const bgRule = `linear-gradient(rgba(6, 12, 26, 0.88), rgba(6, 12, 26, 0.92)), url('${config.fundo}')`;
       document.body.style.backgroundImage = bgRule;
-      document.getElementById('lock-screen').style.backgroundImage = `linear-gradient(rgba(6, 12, 26, 0.85), rgba(6, 12, 26, 0.92)), url('${config.fundo}')`;
+      const lockScreen = document.getElementById('lock-screen');
+      if (lockScreen) lockScreen.style.backgroundImage = `linear-gradient(rgba(6, 12, 26, 0.85), rgba(6, 12, 26, 0.92)), url('${config.fundo}')`;
     }
 
     function persistir() {
@@ -491,27 +488,40 @@
     }
 
     function autenticar(e) {
-      e.preventDefault();
-      const p = document.getElementById('pass').value;
-      if (p === config.senha) {
-        document.getElementById('lock-screen').style.display = 'none';
-        document.getElementById('app-container').style.display = 'flex';
+      if (e) e.preventDefault();
+      const passEl = document.getElementById('pass');
+      const errEl = document.getElementById('lock-err');
+      const lockScreen = document.getElementById('lock-screen');
+      const appContainer = document.getElementById('app-container');
+
+      if (passEl && passEl.value === config.senha) {
+        if (lockScreen) lockScreen.style.display = 'none';
+        if (appContainer) appContainer.style.display = 'flex';
         renderizarTudo();
       } else {
-        document.getElementById('lock-err').style.display = 'block';
-        document.getElementById('pass').value = '';
-        document.getElementById('pass').focus();
+        if (errEl) errEl.style.display = 'block';
+        if (passEl) {
+          passEl.value = '';
+          passEl.focus();
+        }
       }
     }
 
+    /* Safe DOM lookup para nunca estourar Uncaught TypeError */
     function abrirModal(id) { 
       const el = document.getElementById(id);
-      if (el) el.style.display = 'flex'; 
+      if (el) {
+        el.style.display = 'flex'; 
+      } else {
+        console.warn(`Elemento #${id} não encontrado no DOM.`);
+      }
     }
     
     function fecharModal(id) { 
       const el = document.getElementById(id);
-      if (el) el.style.display = 'none'; 
+      if (el) {
+        el.style.display = 'none'; 
+      }
     }
 
     function alternarOrdem() {
@@ -520,26 +530,39 @@
     }
 
     function filtrarPaineis() {
-      termoBusca = document.getElementById('input-pesquisa').value.toLowerCase().trim();
+      const searchEl = document.getElementById('input-pesquisa');
+      termoBusca = searchEl ? searchEl.value.toLowerCase().trim() : "";
       renderizarTudo();
     }
 
     function abrirModalConfig() {
-      document.getElementById('cfg-nome').value = config.nome;
-      document.getElementById('cfg-badge').value = config.badge;
-      document.getElementById('cfg-logo').value = config.logo;
-      document.getElementById('cfg-fundo').value = config.fundo;
-      document.getElementById('cfg-senha').value = config.senha;
+      const nomeEl = document.getElementById('cfg-nome');
+      const badgeEl = document.getElementById('cfg-badge');
+      const logoEl = document.getElementById('cfg-logo');
+      const fundoEl = document.getElementById('cfg-fundo');
+      const senhaEl = document.getElementById('cfg-senha');
+
+      if (nomeEl) nomeEl.value = config.nome;
+      if (badgeEl) badgeEl.value = config.badge;
+      if (logoEl) logoEl.value = config.logo;
+      if (fundoEl) fundoEl.value = config.fundo;
+      if (senhaEl) senhaEl.value = config.senha;
       abrirModal('modal-config');
     }
 
     function salvarConfiguracoes(e) {
       e.preventDefault();
-      config.nome = document.getElementById('cfg-nome').value.trim();
-      config.badge = document.getElementById('cfg-badge').value.trim();
-      config.logo = normalizarCaminho(document.getElementById('cfg-logo').value.trim());
-      config.fundo = normalizarCaminho(document.getElementById('cfg-fundo').value.trim());
-      config.senha = document.getElementById('cfg-senha').value;
+      const nomeEl = document.getElementById('cfg-nome');
+      const badgeEl = document.getElementById('cfg-badge');
+      const logoEl = document.getElementById('cfg-logo');
+      const fundoEl = document.getElementById('cfg-fundo');
+      const senhaEl = document.getElementById('cfg-senha');
+
+      if (nomeEl) config.nome = nomeEl.value.trim();
+      if (badgeEl) config.badge = badgeEl.value.trim();
+      if (logoEl) config.logo = normalizarCaminho(logoEl.value.trim());
+      if (fundoEl) config.fundo = normalizarCaminho(fundoEl.value.trim());
+      if (senhaEl) config.senha = senhaEl.value;
       
       persistir();
       fecharModal('modal-config');
@@ -598,25 +621,33 @@
     }
 
     function abrirModalNovaCategoria() {
-      document.getElementById('cat-edit-id').value = '';
-      document.getElementById('cat-nome').value = '';
-      document.getElementById('cat-modal-title').innerText = "Criar Nova Categoria";
+      const editId = document.getElementById('cat-edit-id');
+      const nomeEl = document.getElementById('cat-nome');
+      const titleEl = document.getElementById('cat-modal-title');
+      if (editId) editId.value = '';
+      if (nomeEl) nomeEl.value = '';
+      if (titleEl) titleEl.innerText = "Criar Nova Categoria";
       abrirModal('modal-categoria');
     }
 
     function editarCategoria(catId) {
       const cat = categorias.find(c => c.id === catId);
       if (!cat) return;
-      document.getElementById('cat-edit-id').value = cat.id;
-      document.getElementById('cat-nome').value = cat.nome;
-      document.getElementById('cat-modal-title').innerText = "Editar Categoria";
+      const editId = document.getElementById('cat-edit-id');
+      const nomeEl = document.getElementById('cat-nome');
+      const titleEl = document.getElementById('cat-modal-title');
+      if (editId) editId.value = cat.id;
+      if (nomeEl) nomeEl.value = cat.nome;
+      if (titleEl) titleEl.innerText = "Editar Categoria";
       abrirModal('modal-categoria');
     }
 
     function salvarCategoria(e) {
       e.preventDefault();
-      const id = document.getElementById('cat-edit-id').value;
-      const nome = document.getElementById('cat-nome').value.trim();
+      const editId = document.getElementById('cat-edit-id');
+      const nomeEl = document.getElementById('cat-nome');
+      const id = editId ? editId.value : null;
+      const nome = nomeEl ? nomeEl.value.trim() : null;
       if (!nome) return;
 
       if (id) {
@@ -640,6 +671,7 @@
 
     function preencherSelectCategorias(selectedId = '') {
       const select = document.getElementById('p-categoria');
+      if (!select) return;
       select.innerHTML = '';
       categorias.forEach(cat => {
         const sel = cat.id === selectedId ? 'selected' : '';
@@ -653,12 +685,20 @@
         abrirModalNovaCategoria();
         return;
       }
-      document.getElementById('p-edit-id').value = '';
-      document.getElementById('p-nome').value = '';
-      document.getElementById('p-desc').value = '';
-      document.getElementById('p-url').value = '';
-      document.getElementById('p-logo').value = '';
-      document.getElementById('panel-modal-title').innerText = "Adicionar Novo Painel";
+      const editId = document.getElementById('p-edit-id');
+      const nomeEl = document.getElementById('p-nome');
+      const descEl = document.getElementById('p-desc');
+      const urlEl = document.getElementById('p-url');
+      const logoEl = document.getElementById('p-logo');
+      const titleEl = document.getElementById('panel-modal-title');
+
+      if (editId) editId.value = '';
+      if (nomeEl) nomeEl.value = '';
+      if (descEl) descEl.value = '';
+      if (urlEl) urlEl.value = '';
+      if (logoEl) logoEl.value = '';
+      if (titleEl) titleEl.innerText = "Adicionar Novo Painel";
+      
       preencherSelectCategorias();
       abrirModal('modal-painel');
     }
@@ -666,24 +706,39 @@
     function editarPainel(id) {
       const p = paineis.find(item => item.id === id);
       if (!p) return;
-      document.getElementById('p-edit-id').value = p.id;
-      document.getElementById('p-nome').value = p.nome;
-      document.getElementById('p-desc').value = p.desc;
-      document.getElementById('p-url').value = p.url;
-      document.getElementById('p-logo').value = p.logo || '';
-      document.getElementById('panel-modal-title').innerText = "Editar Painel";
+      const editId = document.getElementById('p-edit-id');
+      const nomeEl = document.getElementById('p-nome');
+      const descEl = document.getElementById('p-desc');
+      const urlEl = document.getElementById('p-url');
+      const logoEl = document.getElementById('p-logo');
+      const titleEl = document.getElementById('panel-modal-title');
+
+      if (editId) editId.value = p.id;
+      if (nomeEl) nomeEl.value = p.nome;
+      if (descEl) descEl.value = p.desc;
+      if (urlEl) urlEl.value = p.url;
+      if (logoEl) logoEl.value = p.logo || '';
+      if (titleEl) titleEl.innerText = "Editar Painel";
+
       preencherSelectCategorias(p.categoriaId);
       abrirModal('modal-painel');
     }
 
     function salvarPainel(e) {
       e.preventDefault();
-      const id = document.getElementById('p-edit-id').value;
-      const categoriaId = document.getElementById('p-categoria').value;
-      const nome = document.getElementById('p-nome').value.trim();
-      const desc = document.getElementById('p-desc').value.trim() || "Atalho";
-      const url = document.getElementById('p-url').value.trim();
-      const logo = normalizarCaminho(document.getElementById('p-logo').value.trim());
+      const editId = document.getElementById('p-edit-id');
+      const catEl = document.getElementById('p-categoria');
+      const nomeEl = document.getElementById('p-nome');
+      const descEl = document.getElementById('p-desc');
+      const urlEl = document.getElementById('p-url');
+      const logoEl = document.getElementById('p-logo');
+
+      const id = editId ? editId.value : null;
+      const categoriaId = catEl ? catEl.value : null;
+      const nome = nomeEl ? nomeEl.value.trim() : "";
+      const desc = descEl ? descEl.value.trim() || "Atalho" : "Atalho";
+      const url = urlEl ? urlEl.value.trim() : "";
+      const logo = logoEl ? normalizarCaminho(logoEl.value.trim()) : "";
 
       if (id) {
         const p = paineis.find(item => item.id === Number(id));
@@ -778,18 +833,21 @@
 
     function renderizarTudo() {
       const btnOrdem = document.getElementById('btn-ordem');
-      if (modoOrdem === 1) {
-        btnOrdem.classList.add('active-sort');
-        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-a-z"></i> <span id="lbl-ordem" class="btn-text">A-Z</span>';
-      } else if (modoOrdem === 2) {
-        btnOrdem.classList.add('active-sort');
-        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-z-a"></i> <span id="lbl-ordem" class="btn-text">Z-A</span>';
-      } else {
-        btnOrdem.classList.remove('active-sort');
-        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-short-wide"></i> <span id="lbl-ordem" class="btn-text">Padrão</span>';
+      if (btnOrdem) {
+        if (modoOrdem === 1) {
+          btnOrdem.classList.add('active-sort');
+          btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-a-z"></i> <span id="lbl-ordem" class="btn-text">A-Z</span>';
+        } else if (modoOrdem === 2) {
+          btnOrdem.classList.add('active-sort');
+          btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-z-a"></i> <span id="lbl-ordem" class="btn-text">Z-A</span>';
+        } else {
+          btnOrdem.classList.remove('active-sort');
+          btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-short-wide"></i> <span id="lbl-ordem" class="btn-text">Padrão</span>';
+        }
       }
 
       const container = document.getElementById('main-content');
+      if (!container) return;
       container.innerHTML = '';
 
       const paineisFiltrados = paineis.filter(p => {
@@ -858,7 +916,14 @@
       }
     }
 
-    inicializarDados();
+    // Inicialização segura no DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      const authForm = document.getElementById('form-auth');
+      if (authForm) {
+        authForm.addEventListener('submit', autenticar);
+      }
+      inicializarDados();
+    });
   </script>
 </body>
 </html>
