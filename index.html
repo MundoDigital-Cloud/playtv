@@ -24,7 +24,6 @@
     
     body {
       background-color: var(--bg);
-      background-image: linear-gradient(rgba(6, 12, 26, 0.88), rgba(6, 12, 26, 0.92)), url('/home/pai/Painel-Novo/arquivos/fundo.png');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -38,7 +37,6 @@
     #lock-screen {
       position: fixed; inset: 0;
       background-color: var(--bg);
-      background-image: linear-gradient(rgba(6, 12, 26, 0.85), rgba(6, 12, 26, 0.92)), url('/home/pai/Painel-Novo/arquivos/fundo.png');
       background-size: cover;
       background-position: center;
       display: flex; align-items: center; justify-content: center; z-index: 99999;
@@ -87,9 +85,9 @@
     .search-box i { position: absolute; left: 12px; color: var(--text-muted); font-size: 13px; }
     .search-input {
       padding: 8px 12px 8px 34px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border);
-      border-radius: 6px; color: #fff; font-size: 13px; outline: none; width: 200px; transition: all 0.2s;
+      border-radius: 6px; color: #fff; font-size: 13px; outline: none; width: 190px; transition: all 0.2s;
     }
-    .search-input:focus { border-color: var(--primary); width: 240px; background: rgba(0, 0, 0, 0.6); }
+    .search-input:focus { border-color: var(--primary); width: 230px; background: rgba(0, 0, 0, 0.6); }
 
     main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 24px 16px; }
 
@@ -206,7 +204,7 @@
   <!-- Tela de Bloqueio -->
   <div id="lock-screen">
     <div class="lock-card">
-      <img id="lock-logo-img" src="/root/arquivos/Logo.png" alt="Logo" class="lock-logo" onerror="this.style.display='none'">
+      <img id="lock-logo-img" src="arquivos/Logo.png" alt="Logo" class="lock-logo" onerror="this.style.display='none'">
       <h2 id="lock-brand-name">Acesso Restrito</h2>
       <p>Introduza a senha do sistema</p>
       <form onsubmit="autenticar(event)">
@@ -221,7 +219,7 @@
   <div id="app-container">
     <header>
       <div class="brand">
-        <img id="header-logo-img" src="/root/arquivos/Logo.png" alt="Logo" class="header-logo" onerror="this.nextElementSibling.style.display='block'">
+        <img id="header-logo-img" src="arquivos/Logo.png" alt="Logo" class="header-logo" onerror="this.nextElementSibling.style.display='block'">
         <h1 id="header-brand-title">Mundo Digital</h1>
         <span id="header-brand-badge">Acesso Rápido</span>
       </div>
@@ -268,12 +266,12 @@
           <input type="text" id="cfg-badge" required>
         </div>
         <div class="form-group">
-          <label>Caminho da Logo (Local ou URL)</label>
-          <input type="text" id="cfg-logo" placeholder="/root/arquivos/Logo.png">
+          <label>Caminho da Logo (Relativo no GitHub ou URL)</label>
+          <input type="text" id="cfg-logo" placeholder="arquivos/Logo.png">
         </div>
         <div class="form-group">
-          <label>Caminho do Fundo (Local ou URL)</label>
-          <input type="text" id="cfg-fundo" placeholder="/root/arquivos/fundo.png">
+          <label>Caminho do Fundo (Relativo no GitHub ou URL)</label>
+          <input type="text" id="cfg-fundo" placeholder="arquivos/fundo.png">
         </div>
 
         <div class="config-section-title">Segurança</div>
@@ -341,9 +339,9 @@
           <input type="url" id="p-url" placeholder="https://..." required>
         </div>
         <div class="form-group">
-          <label>Logo Customizada (Caminho local, URL de imagem ou ícone FontAwesome)</label>
-          <input type="text" id="p-logo" placeholder="Ex: /home/pai/.../logo.png ou fa-solid fa-tv">
-          <small style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">Deixe vazio para buscar o favicon automático do site.</small>
+          <label>Logo Customizada (Ex: arquivos/foto.png, URL ou ícone FontAwesome)</label>
+          <input type="text" id="p-logo" placeholder="Ex: arquivos/KvipNet.jpeg ou fa-solid fa-tv">
+          <small style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">Deixe vazio para usar o favicon automático do site.</small>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn-secondary" onclick="fecharModal('modal-painel')">Cancelar</button>
@@ -354,34 +352,71 @@
   </div>
 
   <script>
-    // Configurações do Sistema
-    let config = JSON.parse(localStorage.getItem('md_config')) || {
+    // Configurações padrão com caminhos relativos ao repositório
+    let config = {
       senha: "kalleb7e",
       nome: "Mundo Digital",
       badge: "Acesso Rápido",
-      logo: "/home/pai/Painel-Novo/arquivos/Logo.png",
-      fundo: "/home/pai/Painel-Novo/arquivos/fundo.png"
+      logo: "arquivos/Logo.png",
+      fundo: "arquivos/fundo.png"
     };
 
     let modoOrdem = parseInt(localStorage.getItem('md_ordem_modo')) || 0;
     let termoBusca = "";
+    let categorias = [];
+    let paineis = [];
 
-    let categorias = JSON.parse(localStorage.getItem('md_categorias')) || [
-      { id: "cat_iptv", nome: "Painéis IPTV" },
-      { id: "cat_util", nome: "Utilitários & Suporte" }
-    ];
-
-    let paineis = JSON.parse(localStorage.getItem('md_paineis_v4')) || [
-      { 
-        id: 1, 
-        categoriaId: "cat_util", 
-        nome: "WhatsApp Web", 
-        desc: "Atendimento e Faturação", 
-        url: "https://web.whatsapp.com",
-        logo: "fa-brands fa-whatsapp",
-        favorito: true
+    // Função para sanitizar caminhos locais do Linux para o GitHub Pages
+    function sanitizarCaminho(caminho) {
+      if (!caminho) return "";
+      if (caminho.startsWith("/home/pai/Painel-Novo/arquivos/")) {
+        return caminho.replace("/home/pai/Painel-Novo/arquivos/", "arquivos/");
       }
-    ];
+      if (caminho.startsWith("/home/pai/Imagens/")) {
+        return caminho.replace("/home/pai/Imagens/", "arquivos/");
+      }
+      return caminho;
+    }
+
+    // Carregamento inicial: Busca data.json na raiz do repositório
+    async function inicializarDados() {
+      // 1. Tenta carregar do data.json da branch main
+      try {
+        const resposta = await fetch('data.json?t=' + Date.now());
+        if (resposta.ok) {
+          const dadosRemotos = await resposta.json();
+          if (dadosRemotos.categorias && dadosRemotos.paineis) {
+            // Se ainda não existir nada no localStorage ou se o usuário estiver abrindo agora
+            if (!localStorage.getItem('md_paineis_v4')) {
+              categorias = dadosRemotos.categorias;
+              paineis = dadosRemotos.paineis;
+              if (dadosRemotos.config) {
+                config = { ...config, ...dadosRemotos.config };
+              }
+              // Ajusta caminhos para a web
+              config.logo = sanitizarCaminho(config.logo);
+              config.fundo = sanitizarCaminho(config.fundo);
+              paineis.forEach(p => p.logo = sanitizarCaminho(p.logo));
+              persistir();
+            }
+          }
+        }
+      } catch (e) {
+        console.log("data.json local/remoto não encontrado ou inacessível, usando localStorage.");
+      }
+
+      // 2. Carrega do localStorage caso já tenha alterações salvas
+      if (localStorage.getItem('md_config')) config = JSON.parse(localStorage.getItem('md_config'));
+      if (localStorage.getItem('md_categorias')) categorias = JSON.parse(localStorage.getItem('md_categorias'));
+      if (localStorage.getItem('md_paineis_v4')) paineis = JSON.parse(localStorage.getItem('md_paineis_v4'));
+
+      config.logo = sanitizarCaminho(config.logo);
+      config.fundo = sanitizarCaminho(config.fundo);
+      paineis.forEach(p => p.logo = sanitizarCaminho(p.logo));
+
+      aplicarEstilosConfig();
+      renderizarTudo();
+    }
 
     function aplicarEstilosConfig() {
       document.getElementById('page-title').innerText = `${config.nome} - ${config.badge}`;
@@ -448,16 +483,16 @@
       e.preventDefault();
       config.nome = document.getElementById('cfg-nome').value.trim();
       config.badge = document.getElementById('cfg-badge').value.trim();
-      config.logo = document.getElementById('cfg-logo').value.trim();
-      config.fundo = document.getElementById('cfg-fundo').value.trim();
+      config.logo = sanitizarCaminho(document.getElementById('cfg-logo').value.trim());
+      config.fundo = sanitizarCaminho(document.getElementById('cfg-fundo').value.trim());
       config.senha = document.getElementById('cfg-senha').value;
       
       persistir();
       fecharModal('modal-config');
-      alert("Configurações atualizadas com sucesso!");
+      alert("Configurações atualizadas!");
     }
 
-    /* Backup: Exportar e Importar */
+    /* Backup */
     function exportarBackup() {
       const backupData = {
         config: config,
@@ -471,7 +506,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `backup_paineis_${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `data.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -487,10 +522,15 @@
         try {
           const dados = JSON.parse(e.target.result);
           if (dados.categorias && dados.paineis) {
-            if (confirm("Importar este arquivo substituirá os painéis e categorias atuais. Deseja continuar?")) {
+            if (confirm("Importar este arquivo substituirá as categorias e painéis atuais. Deseja continuar?")) {
               categorias = dados.categorias;
               paineis = dados.paineis;
               if (dados.config) config = { ...config, ...dados.config };
+              
+              config.logo = sanitizarCaminho(config.logo);
+              config.fundo = sanitizarCaminho(config.fundo);
+              paineis.forEach(p => p.logo = sanitizarCaminho(p.logo));
+
               persistir();
               fecharModal('modal-config');
               alert("Dados importados com sucesso!");
@@ -499,7 +539,7 @@
             alert("Formato de arquivo inválido!");
           }
         } catch (err) {
-          alert("Erro ao ler o arquivo JSON/TXT: " + err.message);
+          alert("Erro ao ler o arquivo JSON: " + err.message);
         }
       };
       reader.readAsText(file);
@@ -594,7 +634,7 @@
       const nome = document.getElementById('p-nome').value.trim();
       const desc = document.getElementById('p-desc').value.trim() || "Atalho";
       const url = document.getElementById('p-url').value.trim();
-      const logo = document.getElementById('p-logo').value.trim();
+      const logo = sanitizarCaminho(document.getElementById('p-logo').value.trim());
 
       if (id) {
         const p = paineis.find(item => item.id === Number(id));
@@ -708,7 +748,6 @@
         return p.nome.toLowerCase().includes(termoBusca) || p.desc.toLowerCase().includes(termoBusca);
       });
 
-      // Seção Especial: Favoritos
       const favoritos = ordenarLista(paineisFiltrados.filter(p => p.favorito));
       if (favoritos.length > 0) {
         let favCards = favoritos.map(p => gerarCardHTML(p)).join('');
@@ -770,8 +809,8 @@
       }
     }
 
-    // Inicializa os estilos e temas salvos
-    aplicarEstilosConfig();
+    // Inicializa carregando os dados do data.json
+    inicializarDados();
   </script>
 </body>
 </html>
