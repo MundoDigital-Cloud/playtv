@@ -3,8 +3,8 @@
     "senha": "kalleb7e",
     "nome": "Mundo Digital",
     "badge": "Acesso Rápido",
-    "logo": "/home/pai/Painel-Novo/arquivos/Logo.png",
-    "fundo": "/home/pai/Painel-Novo/arquivos/fundo.png"
+    "logo": "arquivos/Logo.png",
+    "fundo": "arquivos/fundo.png"
   },
   "categorias": [
     {
@@ -35,7 +35,7 @@
       "nome": "KVIPTV",
       "desc": "Atalho",
       "url": "https://sigma2.knetviptv.shop/#/dashboard",
-      "logo": "/home/pai/Imagens/KvipNet.jpeg",
+      "logo": "arquivos/KvipNet.jpeg",
       "favorito": true
     },
     {
@@ -44,7 +44,8 @@
       "nome": "IMPERIO TV",
       "desc": "Atalho",
       "url": "https://imperiotv.sbs/#/sign-in?redirect=/dashboard",
-      "logo": "/home/pai/Imagens/iMPEIRO.png"
+      "logo": "arquivos/iMPEIRO.png",
+      "favorito": false
     },
     {
       "id": 1792343897321,
@@ -52,7 +53,7 @@
       "nome": "RYZEEN",
       "desc": "Atalho",
       "url": "https://ryzeen.sigma.vin/#/dashboard",
-      "logo": "/home/pai/Imagens/ryzeen.png",
+      "logo": "arquivos/ryzeen.png",
       "favorito": true
     },
     {
@@ -61,7 +62,7 @@
       "nome": "P2PRIMETV",
       "desc": "Atalho",
       "url": "https://equipep2primetv13.sbs/#/dashboard",
-      "logo": "/home/pai/Imagens/PRIME.jpeg",
+      "logo": "arquivos/PRIME.jpeg",
       "favorito": true
     },
     {
@@ -70,7 +71,7 @@
       "nome": "P2 CINE",
       "desc": "Atalho",
       "url": "https://daily3.news/login/",
-      "logo": "/home/pai/Imagens/p2cine.png",
+      "logo": "arquivos/p2cine.png",
       "favorito": true
     },
     {
@@ -79,7 +80,8 @@
       "nome": "GESTOR DE CLIENTES",
       "desc": "Atalho",
       "url": "https://painel.gerenciaclientes.com.br/",
-      "logo": "/home/pai/Imagens/gestor.webp"
+      "logo": "arquivos/gestor.webp",
+      "favorito": false
     },
     {
       "id": 1792344422643,
@@ -96,14 +98,15 @@
       "nome": "ChatGPT",
       "desc": "Inteligencia Artificial",
       "url": "https://chatgpt.com/",
-      "logo": ""
+      "logo": "",
+      "favorito": false
     },
     {
       "id": 1792344572343,
       "categoriaId": "cat_1792344489898",
       "nome": "Gemini",
       "desc": "Inteligencia Artificial Da Google",
-      "url": "http://gemini.google.com/",
+      "url": "https://gemini.google.com/",
       "logo": "",
       "favorito": true
     },
@@ -113,7 +116,8 @@
       "nome": "Google Flow",
       "desc": "Gerar vídeos e Gerar imagens",
       "url": "https://flow.google.com/",
-      "logo": "/home/pai/Imagens/FLow.webp"
+      "logo": "arquivos/FLow.webp",
+      "favorito": false
     },
     {
       "id": 1792345524792,
@@ -121,7 +125,7 @@
       "nome": "BitSafira",
       "desc": "Atalho",
       "url": "https://app.bitsafira.com.br/",
-      "logo": "/home/pai/Imagens/BitSafira.png",
+      "logo": "arquivos/BitSafira.png",
       "favorito": true
     },
     {
@@ -148,7 +152,7 @@
       "nome": "Cap Player",
       "desc": "Atalho",
       "url": "https://pt.capplayer.com/mylist",
-      "logo": "/home/pai/Imagens/caṕ.jpeg",
+      "logo": "arquivos/cap.jpeg",
       "favorito": false
     },
     {
@@ -175,7 +179,7 @@
       "nome": "Easy Player",
       "desc": "Atalho",
       "url": "https://easyplayer.io/#/upload-playlist",
-      "logo": "/home/pai/Imagens/easy.jpeg",
+      "logo": "arquivos/easy.jpeg",
       "favorito": false
     },
     {
