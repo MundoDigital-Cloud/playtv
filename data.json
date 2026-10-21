@@ -1,0 +1,211 @@
+{
+  "config": {
+    "senha": "kalleb7e",
+    "nome": "Mundo Digital",
+    "badge": "Acesso Rápido",
+    "logo": "/home/pai/Painel-Novo/arquivos/Logo.png",
+    "fundo": "/home/pai/Painel-Novo/arquivos/fundo.png"
+  },
+  "categorias": [
+    {
+      "id": "cat_1792343461983",
+      "nome": "Paíneis"
+    },
+    {
+      "id": "cat_1792344180719",
+      "nome": "Gestores"
+    },
+    {
+      "id": "cat_1792344489898",
+      "nome": "Inteligencia Artificial"
+    },
+    {
+      "id": "cat_1792345586945",
+      "nome": "Apps"
+    },
+    {
+      "id": "cat_1792542038248",
+      "nome": "Notas e Ferramentas"
+    }
+  ],
+  "paineis": [
+    {
+      "id": 1792343719730,
+      "categoriaId": "cat_1792343461983",
+      "nome": "KVIPTV",
+      "desc": "Atalho",
+      "url": "https://sigma2.knetviptv.shop/#/dashboard",
+      "logo": "/home/pai/Imagens/KvipNet.jpeg",
+      "favorito": true
+    },
+    {
+      "id": 1792343831048,
+      "categoriaId": "cat_1792343461983",
+      "nome": "IMPERIO TV",
+      "desc": "Atalho",
+      "url": "https://imperiotv.sbs/#/sign-in?redirect=/dashboard",
+      "logo": "/home/pai/Imagens/iMPEIRO.png"
+    },
+    {
+      "id": 1792343897321,
+      "categoriaId": "cat_1792343461983",
+      "nome": "RYZEEN",
+      "desc": "Atalho",
+      "url": "https://ryzeen.sigma.vin/#/dashboard",
+      "logo": "/home/pai/Imagens/ryzeen.png",
+      "favorito": true
+    },
+    {
+      "id": 1792343989972,
+      "categoriaId": "cat_1792343461983",
+      "nome": "P2PRIMETV",
+      "desc": "Atalho",
+      "url": "https://equipep2primetv13.sbs/#/dashboard",
+      "logo": "/home/pai/Imagens/PRIME.jpeg",
+      "favorito": true
+    },
+    {
+      "id": 1792344059933,
+      "categoriaId": "cat_1792343461983",
+      "nome": "P2 CINE",
+      "desc": "Atalho",
+      "url": "https://daily3.news/login/",
+      "logo": "/home/pai/Imagens/p2cine.png",
+      "favorito": true
+    },
+    {
+      "id": 1792344258577,
+      "categoriaId": "cat_1792344180719",
+      "nome": "GESTOR DE CLIENTES",
+      "desc": "Atalho",
+      "url": "https://painel.gerenciaclientes.com.br/",
+      "logo": "/home/pai/Imagens/gestor.webp"
+    },
+    {
+      "id": 1792344422643,
+      "categoriaId": "cat_1792344180719",
+      "nome": "IBO New",
+      "desc": "(também conhecido como IBO Revenda)",
+      "url": "https://gerenciaapp.top",
+      "logo": "",
+      "favorito": true
+    },
+    {
+      "id": 1792344526530,
+      "categoriaId": "cat_1792344489898",
+      "nome": "ChatGPT",
+      "desc": "Inteligencia Artificial",
+      "url": "https://chatgpt.com/",
+      "logo": ""
+    },
+    {
+      "id": 1792344572343,
+      "categoriaId": "cat_1792344489898",
+      "nome": "Gemini",
+      "desc": "Inteligencia Artificial Da Google",
+      "url": "http://gemini.google.com/",
+      "logo": "",
+      "favorito": true
+    },
+    {
+      "id": 1792344762839,
+      "categoriaId": "cat_1792344489898",
+      "nome": "Google Flow",
+      "desc": "Gerar vídeos e Gerar imagens",
+      "url": "https://flow.google.com/",
+      "logo": "/home/pai/Imagens/FLow.webp"
+    },
+    {
+      "id": 1792345524792,
+      "categoriaId": "cat_1792344180719",
+      "nome": "BitSafira",
+      "desc": "Atalho",
+      "url": "https://app.bitsafira.com.br/",
+      "logo": "/home/pai/Imagens/BitSafira.png",
+      "favorito": true
+    },
+    {
+      "id": 1792345614854,
+      "categoriaId": "cat_1792345586945",
+      "nome": "Ibo Player Pro",
+      "desc": "Atalho",
+      "url": "https://iboproapp.com",
+      "logo": "",
+      "favorito": false
+    },
+    {
+      "id": 1792345676809,
+      "categoriaId": "cat_1792345586945",
+      "nome": "VU Player Pro",
+      "desc": "Atalho",
+      "url": "https://vuplayer.pro/pt-BR/login",
+      "logo": "",
+      "favorito": false
+    },
+    {
+      "id": 1792345716275,
+      "categoriaId": "cat_1792345586945",
+      "nome": "Cap Player",
+      "desc": "Atalho",
+      "url": "https://pt.capplayer.com/mylist",
+      "logo": "/home/pai/Imagens/caṕ.jpeg",
+      "favorito": false
+    },
+    {
+      "id": 1792345917589,
+      "categoriaId": "cat_1792345586945",
+      "nome": "BOB Player",
+      "desc": "Atalho",
+      "url": "https://bobplayer.com/device/login",
+      "logo": "",
+      "favorito": false
+    },
+    {
+      "id": 1792345995491,
+      "categoriaId": "cat_1792345586945",
+      "nome": "9Xtream 4K Player",
+      "desc": "Atalho",
+      "url": "https://9xtream4k.com/manage/login/",
+      "logo": "",
+      "favorito": false
+    },
+    {
+      "id": 1792346113637,
+      "categoriaId": "cat_1792345586945",
+      "nome": "Easy Player",
+      "desc": "Atalho",
+      "url": "https://easyplayer.io/#/upload-playlist",
+      "logo": "/home/pai/Imagens/easy.jpeg",
+      "favorito": false
+    },
+    {
+      "id": 1792346179362,
+      "categoriaId": "cat_1792345586945",
+      "nome": "Quick Player",
+      "desc": "Atalho",
+      "url": "https://quickplayer.app/#/upload-playlist",
+      "logo": "",
+      "favorito": false
+    },
+    {
+      "id": 1792541924141,
+      "categoriaId": "cat_1792343461983",
+      "nome": "Portal Ativações",
+      "desc": "Ativar Apps De IPTV",
+      "url": "https://ativacaodeaplicativos.com/",
+      "logo": "",
+      "favorito": false
+    },
+    {
+      "id": 1792542069268,
+      "categoriaId": "cat_1792542038248",
+      "nome": "Google Keep",
+      "desc": "Notas Do Google",
+      "url": "https://keep.google.com/#home",
+      "logo": "",
+      "favorito": false
+    }
+  ],
+  "versao": "2.0",
+  "dataExportacao": "2026-10-21T16:03:31.997Z"
+}
