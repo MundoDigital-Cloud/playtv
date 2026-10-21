@@ -10,8 +10,8 @@
   <style>
     :root {
       --bg: #060c1a;
-      --card: rgba(12, 21, 41, 0.92);
-      --card-hover: rgba(19, 32, 60, 0.95);
+      --card: rgba(12, 21, 41, 0.94);
+      --card-hover: rgba(19, 32, 60, 0.98);
       --border: #1e293b;
       --text: #f8fafc;
       --text-muted: #94a3b8;
@@ -20,7 +20,7 @@
       --danger: #ef4444;
       --gold: #facc15;
     }
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
     
     body {
       background-color: var(--bg);
@@ -33,104 +33,114 @@
       flex-direction: column;
     }
 
+    /* Tela de Bloqueio */
     #lock-screen {
       position: fixed; inset: 0;
       background-color: var(--bg);
       background-size: cover;
       background-position: center;
       display: flex; align-items: center; justify-content: center; z-index: 99999;
+      padding: 16px;
     }
     .lock-card {
       background: var(--card); border: 1px solid var(--border);
-      padding: 32px; border-radius: 16px; width: 100%; max-width: 380px;
-      text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
-      backdrop-filter: blur(8px);
+      padding: 32px 24px; border-radius: 16px; width: 100%; max-width: 360px;
+      text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
     }
     .lock-logo {
-      max-width: 140px; max-height: 90px; object-fit: contain; margin-bottom: 16px;
+      max-width: 130px; max-height: 80px; object-fit: contain; margin-bottom: 16px;
     }
     .lock-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-    .lock-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .lock-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
     .lock-input {
-      width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.4);
+      width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.5);
       border: 1px solid var(--border); border-radius: 8px; color: #fff;
-      font-size: 15px; outline: none; margin-bottom: 16px; text-align: center;
+      font-size: 16px; outline: none; margin-bottom: 16px; text-align: center;
     }
     .lock-input:focus { border-color: var(--primary); }
     .lock-btn {
-      width: 100%; padding: 12px; background: var(--primary);
+      width: 100%; padding: 14px; background: var(--primary);
       color: #040812; border: none; border-radius: 8px; font-weight: 700;
-      cursor: pointer; transition: 0.2s;
+      font-size: 15px; cursor: pointer; transition: 0.2s;
     }
     .lock-btn:hover { background: var(--primary-hover); }
-    .lock-err { color: var(--danger); font-size: 12px; margin-top: 10px; display: none; }
+    .lock-err { color: var(--danger); font-size: 13px; margin-top: 12px; display: none; font-weight: 500; }
 
+    /* App Container */
     #app-container { display: none; flex-direction: column; flex: 1; }
+    
     header {
       background: var(--card); border-bottom: 1px solid var(--border);
-      padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
-      backdrop-filter: blur(8px); flex-wrap: wrap; gap: 12px;
+      padding: 12px 16px; display: flex; flex-direction: column; gap: 12px;
+      backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;
     }
-    .brand { display: flex; align-items: center; gap: 14px; }
-    .header-logo { height: 42px; width: auto; object-fit: contain; }
-    .brand h1 { font-size: 18px; font-weight: 700; }
-    .brand span { font-size: 11px; background: rgba(56,189,248,0.15); color: var(--primary); padding: 3px 10px; border-radius: 12px; font-weight: 600; }
+    
+    .header-top {
+      display: flex; justify-content: space-between; align-items: center; width: 100%;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .header-logo { height: 36px; width: auto; object-fit: contain; }
+    .brand h1 { font-size: 16px; font-weight: 700; display: none; }
+    .brand span { font-size: 11px; background: rgba(56,189,248,0.15); color: var(--primary); padding: 3px 8px; border-radius: 12px; font-weight: 600; }
 
-    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .header-actions { display: flex; gap: 8px; align-items: center; width: 100%; }
 
-    .search-box { position: relative; display: flex; align-items: center; }
+    /* Barra de Pesquisa */
+    .search-box { position: relative; display: flex; align-items: center; flex: 1; }
     .search-box i { position: absolute; left: 12px; color: var(--text-muted); font-size: 13px; }
     .search-input {
-      padding: 8px 12px 8px 34px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border);
-      border-radius: 6px; color: #fff; font-size: 13px; outline: none; width: 190px; transition: all 0.2s;
+      padding: 10px 12px 10px 34px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border);
+      border-radius: 8px; color: #fff; font-size: 14px; outline: none; width: 100%; transition: all 0.2s;
     }
-    .search-input:focus { border-color: var(--primary); width: 230px; background: rgba(0, 0, 0, 0.6); }
+    .search-input:focus { border-color: var(--primary); background: rgba(0, 0, 0, 0.7); }
 
-    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 24px 16px; }
+    .action-buttons-group { display: flex; gap: 6px; }
 
-    .btn-action {
-      background: var(--primary); color: #040812; border: none;
-      padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 13px;
-      cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s;
+    /* Botões */
+    .btn-action, .btn-secondary-action {
+      padding: 10px 12px; border-radius: 8px; font-weight: 600; font-size: 13px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;
+      white-space: nowrap; height: 38px;
     }
+    .btn-action { background: var(--primary); color: #040812; border: none; }
     .btn-action:hover { background: var(--primary-hover); }
-
-    .btn-secondary-action {
-      background: rgba(255, 255, 255, 0.08); color: var(--text); border: 1px solid var(--border);
-      padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 13px;
-      cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s;
-    }
+    .btn-secondary-action { background: rgba(255, 255, 255, 0.08); color: var(--text); border: 1px solid var(--border); }
     .btn-secondary-action:hover { background: rgba(255, 255, 255, 0.15); }
     .btn-secondary-action.active-sort { border-color: var(--primary); color: var(--primary); }
 
+    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 16px 12px; }
+
+    /* Categorias */
     .category-group {
-      margin-bottom: 28px; background: rgba(12, 21, 41, 0.5);
-      border: 1px solid var(--border); border-radius: 14px; padding: 20px;
+      margin-bottom: 24px; background: rgba(12, 21, 41, 0.6);
+      border: 1px solid var(--border); border-radius: 14px; padding: 16px;
     }
     .category-group.fav-group {
-      border-color: rgba(250, 204, 21, 0.3); background: rgba(250, 204, 21, 0.03);
+      border-color: rgba(250, 204, 21, 0.35); background: rgba(250, 204, 21, 0.04);
     }
     .category-header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 10px;
+      margin-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 10px;
     }
     .category-title {
-      font-size: 16px; font-weight: 700; color: var(--primary);
+      font-size: 15px; font-weight: 700; color: var(--primary);
       display: flex; align-items: center; gap: 8px;
     }
     .fav-group .category-title { color: var(--gold); }
-    .cat-actions { display: flex; gap: 4px; }
+    .cat-actions { display: flex; gap: 2px; }
     .btn-cat-tool {
       background: transparent; border: none; color: #64748b; font-size: 12px;
-      cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: 0.2s;
+      cursor: pointer; padding: 6px 8px; border-radius: 4px; transition: 0.2s;
     }
     .btn-cat-tool:hover { color: var(--text); }
     .btn-cat-tool.del:hover { color: var(--danger); }
 
-    .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    /* Cards */
+    .grid-cards { display: grid; grid-template-columns: 1fr; gap: 12px; }
     .panel-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 16px; display: flex; flex-direction: column;
+      border-radius: 12px; padding: 14px; display: flex; flex-direction: column;
       gap: 12px; position: relative; transition: 0.2s; backdrop-filter: blur(6px);
     }
     .panel-card:hover { border-color: #334155; transform: translateY(-2px); background: var(--card-hover); }
@@ -138,50 +148,53 @@
     
     .panel-icon-box {
       width: 44px; height: 44px; border-radius: 8px;
-      background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.06);
       display: flex; align-items: center; justify-content: center;
       overflow: hidden; flex-shrink: 0;
     }
     .panel-icon-box img { width: 100%; height: 100%; object-fit: cover; }
     .panel-icon-box i { font-size: 20px; color: var(--primary); }
 
-    .panel-info { flex: 1; overflow: hidden; }
+    .panel-info { flex: 1; overflow: hidden; min-width: 0; }
     .panel-name { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .panel-desc { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .panel-desc { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
     
-    .panel-ctrls { display: flex; gap: 2px; align-items: center; }
+    .panel-ctrls { display: flex; gap: 4px; align-items: center; }
     .btn-card-ctrl {
       background: transparent; border: none; color: #64748b;
-      cursor: pointer; padding: 6px; border-radius: 4px; font-size: 13px; transition: 0.2s;
+      cursor: pointer; padding: 8px; border-radius: 6px; font-size: 14px; transition: 0.2s;
     }
-    .btn-card-ctrl:hover { color: var(--text); }
+    .btn-card-ctrl:hover { color: var(--text); background: rgba(255,255,255,0.05); }
     .btn-card-ctrl.fav-btn.is-fav { color: var(--gold); }
     .btn-card-ctrl.del:hover { color: var(--danger); }
 
-    .panel-links { display: flex; gap: 8px; margin-top: 4px; }
+    .panel-links { display: flex; gap: 8px; }
     .btn-open {
       flex: 1; text-align: center; background: rgba(56,189,248,0.12); color: var(--primary);
-      text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;
+      text-decoration: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
     }
     .btn-open:hover { background: var(--primary); color: #040812; }
 
+    /* Modais */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
       display: none; align-items: center; justify-content: center; z-index: 10000;
+      padding: 12px;
     }
     .modal {
       background: #0c1529; border: 1px solid var(--border);
-      padding: 24px; border-radius: 12px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+      padding: 20px; border-radius: 14px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
     }
-    .modal h3 { font-size: 16px; margin-bottom: 16px; }
-    .form-group { margin-bottom: 14px; }
+    .modal h3 { font-size: 16px; margin-bottom: 14px; }
+    .form-group { margin-bottom: 12px; }
     .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
     .form-group input, .form-group select {
-      width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-      border-radius: 6px; color: #fff; font-size: 13px; outline: none;
+      width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+      border-radius: 8px; color: #fff; font-size: 14px; outline: none;
     }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
-    .btn-secondary { background: transparent; border: 1px solid var(--border); color: #fff; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+    .btn-secondary { background: transparent; border: 1px solid var(--border); color: #fff; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; }
     
     .config-section-title {
       font-size: 13px; font-weight: 700; color: var(--primary);
@@ -189,6 +202,39 @@
     }
     .backup-buttons {
       display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;
+    }
+
+    /* Regras Responsivas para Telas Maiores (Tablets e PCs) */
+    @media (min-width: 768px) {
+      header {
+        flex-direction: row; justify-content: space-between; align-items: center; padding: 12px 24px;
+      }
+      .header-actions {
+        width: auto; flex: none;
+      }
+      .search-box {
+        width: 220px;
+      }
+      .grid-cards {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      main {
+        padding: 24px 16px;
+      }
+      .btn-text {
+        display: inline !important;
+      }
+    }
+
+    /* Oculta textos dos botões em telas pequenas para economizar espaço */
+    @media (max-width: 767px) {
+      .btn-text {
+        display: none;
+      }
+      .header-actions {
+        justify-content: space-between;
+      }
     }
   </style>
 </head>
@@ -211,28 +257,33 @@
   <!-- Painel Principal -->
   <div id="app-container">
     <header>
-      <div class="brand">
-        <img id="header-logo-img" src="./arquivos/Logo.png" alt="Logo" class="header-logo" onerror="this.nextElementSibling.style.display='block'">
-        <h1 id="header-brand-title">Mundo Digital</h1>
-        <span id="header-brand-badge">Acesso Rápido</span>
+      <div class="header-top">
+        <div class="brand">
+          <img id="header-logo-img" src="./arquivos/Logo.png" alt="Logo" class="header-logo" onerror="this.nextElementSibling.style.display='block'">
+          <h1 id="header-brand-title">Mundo Digital</h1>
+          <span id="header-brand-badge">Acesso Rápido</span>
+        </div>
       </div>
+      
       <div class="header-actions">
         <div class="search-box">
           <i class="fa-solid fa-magnifying-glass"></i>
           <input type="text" id="input-pesquisa" class="search-input" placeholder="Pesquisar painel..." oninput="filtrarPaineis()">
         </div>
-        <button id="btn-ordem" class="btn-secondary-action" onclick="alternarOrdem()" title="Alternar ordem alfabética">
-          <i class="fa-solid fa-arrow-down-a-z"></i> <span id="lbl-ordem">Padrão</span>
-        </button>
-        <button class="btn-secondary-action" onclick="abrirModalNovaCategoria()">
-          <i class="fa-solid fa-folder-plus"></i> Categoria
-        </button>
-        <button class="btn-action" onclick="abrirModalNovoPainel()">
-          <i class="fa-solid fa-plus"></i> Painel
-        </button>
-        <button class="btn-secondary-action" onclick="abrirModalConfig()" title="Configurações e Backup">
-          <i class="fa-solid fa-gear"></i>
-        </button>
+        <div class="action-buttons-group">
+          <button id="btn-ordem" class="btn-secondary-action" onclick="alternarOrdem()" title="Ordem alfabética">
+            <i class="fa-solid fa-arrow-down-a-z"></i> <span id="lbl-ordem" class="btn-text">Padrão</span>
+          </button>
+          <button class="btn-secondary-action" onclick="abrirModalNovaCategoria()" title="Nova Categoria">
+            <i class="fa-solid fa-folder-plus"></i> <span class="btn-text">Categoria</span>
+          </button>
+          <button class="btn-action" onclick="abrirModalNovoPainel()" title="Novo Painel">
+            <i class="fa-solid fa-plus"></i> <span class="btn-text">Painel</span>
+          </button>
+          <button class="btn-secondary-action" onclick="abrirModalConfig()" title="Configurações e Backup">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -396,7 +447,6 @@
     async function inicializarDados() {
       const dadosSalvos = localStorage.getItem('md_paineis_v4');
       
-      // Se não há dados ou se só tem 1 item antigo de teste, carrega obrigatoriamente do data.json
       if (!dadosSalvos || JSON.parse(dadosSalvos).length <= 1) {
         try {
           await buscarDataJson();
@@ -605,7 +655,7 @@
       document.getElementById('p-logo').value = '';
       document.getElementById('panel-modal-title').innerText = "Adicionar Novo Painel";
       preencherSelectCategorias();
-      abrirModal('modal-painel');
+      abrirModal('modal-panel');
     }
 
     function editarPainel(id) {
@@ -725,13 +775,13 @@
       const btnOrdem = document.getElementById('btn-ordem');
       if (modoOrdem === 1) {
         btnOrdem.classList.add('active-sort');
-        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-a-z"></i> <span id="lbl-ordem">A-Z</span>';
+        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-a-z"></i> <span id="lbl-ordem" class="btn-text">A-Z</span>';
       } else if (modoOrdem === 2) {
         btnOrdem.classList.add('active-sort');
-        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-z-a"></i> <span id="lbl-ordem">Z-A</span>';
+        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-z-a"></i> <span id="lbl-ordem" class="btn-text">Z-A</span>';
       } else {
         btnOrdem.classList.remove('active-sort');
-        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-short-wide"></i> <span id="lbl-ordem">Padrão</span>';
+        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-short-wide"></i> <span id="lbl-ordem" class="btn-text">Padrão</span>';
       }
 
       const container = document.getElementById('main-content');
