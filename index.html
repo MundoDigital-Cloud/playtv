@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
+  <title id="page-title">Mundo Digital - Acesso Rápido</title>
+  <meta content="#060c1a" name="theme-color">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #060c1a;
+      --card: rgba(12, 21, 41, 0.92);
+      --card-hover: rgba(19, 32, 60, 0.95);
+      --border: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
+      --danger: #ef4444;
+      --gold: #facc15;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+    
+    body {
+      background-color: var(--bg);
+      background-image: linear-gradient(rgba(6, 12, 26, 0.88), rgba(6, 12, 26, 0.92)), url('/home/pai/Painel-Novo/arquivos/fundo.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Tela de Bloqueio */
+    #lock-screen {
+      position: fixed; inset: 0;
+      background-color: var(--bg);
+      background-image: linear-gradient(rgba(6, 12, 26, 0.85), rgba(6, 12, 26, 0.92)), url('/home/pai/Painel-Novo/arquivos/fundo.png');
+      background-size: cover;
+      background-position: center;
+      display: flex; align-items: center; justify-content: center; z-index: 99999;
+    }
+    .lock-card {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 32px; border-radius: 16px; width: 100%; max-width: 380px;
+      text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+    }
+    .lock-logo {
+      max-width: 140px; max-height: 90px; object-fit: contain; margin-bottom: 16px;
+    }
+    .lock-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .lock-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .lock-input {
+      width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border); border-radius: 8px; color: #fff;
+      font-size: 15px; outline: none; margin-bottom: 16px; text-align: center;
+    }
+    .lock-input:focus { border-color: var(--primary); }
+    .lock-btn {
+      width: 100%; padding: 12px; background: var(--primary);
+      color: #040812; border: none; border-radius: 8px; font-weight: 700;
+      cursor: pointer; transition: 0.2s;
+    }
+    .lock-btn:hover { background: var(--primary-hover); }
+    .lock-err { color: var(--danger); font-size: 12px; margin-top: 10px; display: none; }
+
+    /* Painel Principal */
+    #app-container { display: none; flex-direction: column; flex: 1; }
+    header {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 12px 24px; display: flex; justify-content: space-between; align-items: center;
+      backdrop-filter: blur(8px); flex-wrap: wrap; gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .header-logo { height: 42px; width: auto; object-fit: contain; }
+    .brand h1 { font-size: 18px; font-weight: 700; display: none; }
+    .brand span { font-size: 11px; background: rgba(56,189,248,0.15); color: var(--primary); padding: 3px 10px; border-radius: 12px; font-weight: 600; }
+
+    .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    /* Barra de Pesquisa */
+    .search-box { position: relative; display: flex; align-items: center; }
+    .search-box i { position: absolute; left: 12px; color: var(--text-muted); font-size: 13px; }
+    .search-input {
+      padding: 8px 12px 8px 34px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border);
+      border-radius: 6px; color: #fff; font-size: 13px; outline: none; width: 200px; transition: all 0.2s;
+    }
+    .search-input:focus { border-color: var(--primary); width: 240px; background: rgba(0, 0, 0, 0.6); }
+
+    main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 24px 16px; }
+
+    /* Botões */
+    .btn-action {
+      background: var(--primary); color: #040812; border: none;
+      padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 13px;
+      cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s;
+    }
+    .btn-action:hover { background: var(--primary-hover); }
+
+    .btn-secondary-action {
+      background: rgba(255, 255, 255, 0.08); color: var(--text); border: 1px solid var(--border);
+      padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 13px;
+      cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s;
+    }
+    .btn-secondary-action:hover { background: rgba(255, 255, 255, 0.15); }
+    .btn-secondary-action.active-sort { border-color: var(--primary); color: var(--primary); }
+
+    /* Categorias */
+    .category-group {
+      margin-bottom: 28px; background: rgba(12, 21, 41, 0.5);
+      border: 1px solid var(--border); border-radius: 14px; padding: 20px;
+    }
+    .category-group.fav-group {
+      border-color: rgba(250, 204, 21, 0.3); background: rgba(250, 204, 21, 0.03);
+    }
+    .category-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 10px;
+    }
+    .category-title {
+      font-size: 16px; font-weight: 700; color: var(--primary);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .fav-group .category-title { color: var(--gold); }
+    .cat-actions { display: flex; gap: 4px; }
+    .btn-cat-tool {
+      background: transparent; border: none; color: #64748b; font-size: 12px;
+      cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: 0.2s;
+    }
+    .btn-cat-tool:hover { color: var(--text); }
+    .btn-cat-tool.del:hover { color: var(--danger); }
+
+    /* Cards */
+    .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .panel-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px; display: flex; flex-direction: column;
+      gap: 12px; position: relative; transition: 0.2s; backdrop-filter: blur(6px);
+    }
+    .panel-card:hover { border-color: #334155; transform: translateY(-2px); background: var(--card-hover); }
+    .panel-header { display: flex; align-items: center; gap: 12px; }
+    
+    .panel-icon-box {
+      width: 44px; height: 44px; border-radius: 8px;
+      background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .panel-icon-box img { width: 100%; height: 100%; object-fit: cover; }
+    .panel-icon-box i { font-size: 20px; color: var(--primary); }
+
+    .panel-info { flex: 1; overflow: hidden; }
+    .panel-name { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .panel-desc { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .panel-ctrls { display: flex; gap: 2px; align-items: center; }
+    .btn-card-ctrl {
+      background: transparent; border: none; color: #64748b;
+      cursor: pointer; padding: 6px; border-radius: 4px; font-size: 13px; transition: 0.2s;
+    }
+    .btn-card-ctrl:hover { color: var(--text); }
+    .btn-card-ctrl.fav-btn.is-fav { color: var(--gold); }
+    .btn-card-ctrl.del:hover { color: var(--danger); }
+
+    .panel-links { display: flex; gap: 8px; margin-top: 4px; }
+    .btn-open {
+      flex: 1; text-align: center; background: rgba(56,189,248,0.12); color: var(--primary);
+      text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;
+    }
+    .btn-open:hover { background: var(--primary); color: #040812; }
+
+    /* Modais */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center; z-index: 10000;
+    }
+    .modal {
+      background: #0c1529; border: 1px solid var(--border);
+      padding: 24px; border-radius: 12px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+    }
+    .modal h3 { font-size: 16px; margin-bottom: 16px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      border-radius: 6px; color: #fff; font-size: 13px; outline: none;
+    }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+    .btn-secondary { background: transparent; border: 1px solid var(--border); color: #fff; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+    
+    .config-section-title {
+      font-size: 13px; font-weight: 700; color: var(--primary);
+      margin: 16px 0 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 4px;
+    }
+    .backup-buttons {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tela de Bloqueio -->
+  <div id="lock-screen">
+    <div class="lock-card">
+      <img id="lock-logo-img" src="/home/pai/Painel-Novo/arquivos/Logo.png" alt="Logo" class="lock-logo" onerror="this.style.display='none'">
+      <h2 id="lock-brand-name">Acesso Restrito</h2>
+      <p>Introduza a senha do sistema</p>
+      <form onsubmit="autenticar(event)">
+        <input type="password" id="pass" class="lock-input" placeholder="Senha..." autofocus required>
+        <button type="submit" class="lock-btn">Entrar</button>
+        <div id="lock-err" class="lock-err">Senha incorreta!</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Painel Principal -->
+  <div id="app-container">
+    <header>
+      <div class="brand">
+        <img id="header-logo-img" src="/home/pai/Painel-Novo/arquivos/Logo.png" alt="Logo" class="header-logo" onerror="this.nextElementSibling.style.display='block'">
+        <h1 id="header-brand-title">Mundo Digital</h1>
+        <span id="header-brand-badge">Acesso Rápido</span>
+      </div>
+      <div class="header-actions">
+        <!-- Barra de Pesquisa -->
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="input-pesquisa" class="search-input" placeholder="Pesquisar painel..." oninput="filtrarPaineis()">
+        </div>
+        <button id="btn-ordem" class="btn-secondary-action" onclick="alternarOrdem()" title="Alternar ordem alfabética">
+          <i class="fa-solid fa-arrow-down-a-z"></i> <span id="lbl-ordem">Padrão</span>
+        </button>
+        <button class="btn-secondary-action" onclick="abrirModalNovaCategoria()">
+          <i class="fa-solid fa-folder-plus"></i> Categoria
+        </button>
+        <button class="btn-action" onclick="abrirModalNovoPainel()">
+          <i class="fa-solid fa-plus"></i> Painel
+        </button>
+        <button class="btn-secondary-action" onclick="abrirModalConfig()" title="Configurações e Backup">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content"></main>
+  </div>
+
+  <!-- Input Oculto para Importar Backup -->
+  <input type="file" id="file-import" accept=".json,.txt" style="display:none;" onchange="processarArquivoImportado(event)">
+
+  <!-- Modal: Configurações & Backup -->
+  <div class="modal-overlay" id="modal-config">
+    <div class="modal">
+      <h3><i class="fa-solid fa-gear"></i> Configurações do Sistema</h3>
+      <form onsubmit="salvarConfiguracoes(event)">
+        
+        <div class="config-section-title">Identidade Visual</div>
+        <div class="form-group">
+          <label>Nome / Título da Empresa</label>
+          <input type="text" id="cfg-nome" required>
+        </div>
+        <div class="form-group">
+          <label>Subtítulo / Etiqueta do Cabeçalho</label>
+          <input type="text" id="cfg-badge" required>
+        </div>
+        <div class="form-group">
+          <label>Caminho da Logo (Local ou URL)</label>
+          <input type="text" id="cfg-logo" placeholder="/home/pai/Painel-Novo/arquivos/Logo.png">
+        </div>
+        <div class="form-group">
+          <label>Caminho do Fundo (Local ou URL)</label>
+          <input type="text" id="cfg-fundo" placeholder="/home/pai/Painel-Novo/arquivos/fundo.png">
+        </div>
+
+        <div class="config-section-title">Segurança</div>
+        <div class="form-group">
+          <label>Nova Senha de Acesso</label>
+          <input type="password" id="cfg-senha" required>
+        </div>
+
+        <div class="config-section-title">Backup e Restauração</div>
+        <div class="backup-buttons">
+          <button type="button" class="btn-secondary-action" onclick="exportarBackup()" style="justify-content:center;">
+            <i class="fa-solid fa-download"></i> Exportar Dados
+          </button>
+          <button type="button" class="btn-secondary-action" onclick="document.getElementById('file-import').click()" style="justify-content:center;">
+            <i class="fa-solid fa-upload"></i> Importar Dados
+          </button>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="fecharModal('modal-config')">Cancelar</button>
+          <button type="submit" class="btn-action">Salvar Configurações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Criar/Editar Categoria -->
+  <div class="modal-overlay" id="modal-categoria">
+    <div class="modal">
+      <h3 id="cat-modal-title">Criar Nova Categoria</h3>
+      <form onsubmit="salvarCategoria(event)">
+        <input type="hidden" id="cat-edit-id">
+        <div class="form-group">
+          <label>Nome da Categoria</label>
+          <input type="text" id="cat-nome" placeholder="Ex: Painéis IPTV, Ferramentas" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="fecharModal('modal-categoria')">Cancelar</button>
+          <button type="submit" class="btn-action">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Criar/Editar Painel -->
+  <div class="modal-overlay" id="modal-painel">
+    <div class="modal">
+      <h3 id="panel-modal-title">Adicionar Novo Painel</h3>
+      <form onsubmit="salvarPainel(event)">
+        <input type="hidden" id="p-edit-id">
+        <div class="form-group">
+          <label>Categoria</label>
+          <select id="p-categoria" required></select>
+        </div>
+        <div class="form-group">
+          <label>Nome</label>
+          <input type="text" id="p-nome" placeholder="Ex: Painel Principal, WhatsApp" required>
+        </div>
+        <div class="form-group">
+          <label>Descrição</label>
+          <input type="text" id="p-desc" placeholder="Ex: Linhas e ativações">
+        </div>
+        <div class="form-group">
+          <label>URL de Acesso</label>
+          <input type="url" id="p-url" placeholder="https://..." required>
+        </div>
+        <div class="form-group">
+          <label>Logo Customizada (Caminho local, URL de imagem ou ícone FontAwesome)</label>
+          <input type="text" id="p-logo" placeholder="Ex: /home/pai/.../logo.png ou fa-solid fa-tv">
+          <small style="font-size: 11px; color: var(--text-muted); display: block; margin-top: 4px;">Deixe vazio para buscar o favicon automático do site.</small>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="fecharModal('modal-painel')">Cancelar</button>
+          <button type="submit" class="btn-action">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Configurações do Sistema
+    let config = JSON.parse(localStorage.getItem('md_config')) || {
+      senha: "kalleb7e",
+      nome: "Mundo Digital",
+      badge: "Acesso Rápido",
+      logo: "/home/pai/Painel-Novo/arquivos/Logo.png",
+      fundo: "/home/pai/Painel-Novo/arquivos/fundo.png"
+    };
+
+    let modoOrdem = parseInt(localStorage.getItem('md_ordem_modo')) || 0;
+    let termoBusca = "";
+
+    let categorias = JSON.parse(localStorage.getItem('md_categorias')) || [
+      { id: "cat_iptv", nome: "Painéis IPTV" },
+      { id: "cat_util", nome: "Utilitários & Suporte" }
+    ];
+
+    let paineis = JSON.parse(localStorage.getItem('md_paineis_v4')) || [
+      { 
+        id: 1, 
+        categoriaId: "cat_util", 
+        nome: "WhatsApp Web", 
+        desc: "Atendimento e Faturação", 
+        url: "https://web.whatsapp.com",
+        logo: "fa-brands fa-whatsapp",
+        favorito: true
+      }
+    ];
+
+    function aplicarEstilosConfig() {
+      document.getElementById('page-title').innerText = `${config.nome} - ${config.badge}`;
+      document.getElementById('header-brand-title').innerText = config.nome;
+      document.getElementById('header-brand-badge').innerText = config.badge;
+      
+      const logoHeader = document.getElementById('header-logo-img');
+      const logoLock = document.getElementById('lock-logo-img');
+      logoHeader.src = config.logo;
+      logoLock.src = config.logo;
+
+      const bgRule = `linear-gradient(rgba(6, 12, 26, 0.88), rgba(6, 12, 26, 0.92)), url('${config.fundo}')`;
+      document.body.style.backgroundImage = bgRule;
+      document.getElementById('lock-screen').style.backgroundImage = `linear-gradient(rgba(6, 12, 26, 0.85), rgba(6, 12, 26, 0.92)), url('${config.fundo}')`;
+    }
+
+    function persistir() {
+      localStorage.setItem('md_config', JSON.stringify(config));
+      localStorage.setItem('md_categorias', JSON.stringify(categorias));
+      localStorage.setItem('md_paineis_v4', JSON.stringify(paineis));
+      localStorage.setItem('md_ordem_modo', modoOrdem);
+      aplicarEstilosConfig();
+      renderizarTudo();
+    }
+
+    function autenticar(e) {
+      e.preventDefault();
+      const p = document.getElementById('pass').value;
+      if (p === config.senha) {
+        document.getElementById('lock-screen').style.display = 'none';
+        document.getElementById('app-container').style.display = 'flex';
+        renderizarTudo();
+      } else {
+        document.getElementById('lock-err').style.display = 'block';
+        document.getElementById('pass').value = '';
+        document.getElementById('pass').focus();
+      }
+    }
+
+    function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function alternarOrdem() {
+      modoOrdem = (modoOrdem + 1) % 3;
+      persistir();
+    }
+
+    function filtrarPaineis() {
+      termoBusca = document.getElementById('input-pesquisa').value.toLowerCase().trim();
+      renderizarTudo();
+    }
+
+    /* Modal de Configurações */
+    function abrirModalConfig() {
+      document.getElementById('cfg-nome').value = config.nome;
+      document.getElementById('cfg-badge').value = config.badge;
+      document.getElementById('cfg-logo').value = config.logo;
+      document.getElementById('cfg-fundo').value = config.fundo;
+      document.getElementById('cfg-senha').value = config.senha;
+      abrirModal('modal-config');
+    }
+
+    function salvarConfiguracoes(e) {
+      e.preventDefault();
+      config.nome = document.getElementById('cfg-nome').value.trim();
+      config.badge = document.getElementById('cfg-badge').value.trim();
+      config.logo = document.getElementById('cfg-logo').value.trim();
+      config.fundo = document.getElementById('cfg-fundo').value.trim();
+      config.senha = document.getElementById('cfg-senha').value;
+      
+      persistir();
+      fecharModal('modal-config');
+      alert("Configurações atualizadas com sucesso!");
+    }
+
+    /* Backup: Exportar e Importar */
+    function exportarBackup() {
+      const backupData = {
+        config: config,
+        categorias: categorias,
+        paineis: paineis,
+        versao: "2.0",
+        dataExportacao: new Date().toISOString()
+      };
+
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `backup_paineis_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function processarArquivoImportado(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const dados = JSON.parse(e.target.result);
+          if (dados.categorias && dados.paineis) {
+            if (confirm("Importar este arquivo substituirá os painéis e categorias atuais. Deseja continuar?")) {
+              categorias = dados.categorias;
+              paineis = dados.paineis;
+              if (dados.config) config = { ...config, ...dados.config };
+              persistir();
+              fecharModal('modal-config');
+              alert("Dados importados com sucesso!");
+            }
+          } else {
+            alert("Formato de arquivo inválido!");
+          }
+        } catch (err) {
+          alert("Erro ao ler o arquivo JSON/TXT: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    /* Gestão de Categorias */
+    function abrirModalNovaCategoria() {
+      document.getElementById('cat-edit-id').value = '';
+      document.getElementById('cat-nome').value = '';
+      document.getElementById('cat-modal-title').innerText = "Criar Nova Categoria";
+      abrirModal('modal-categoria');
+    }
+
+    function editarCategoria(catId) {
+      const cat = categorias.find(c => c.id === catId);
+      if (!cat) return;
+      document.getElementById('cat-edit-id').value = cat.id;
+      document.getElementById('cat-nome').value = cat.nome;
+      document.getElementById('cat-modal-title').innerText = "Editar Categoria";
+      abrirModal('modal-categoria');
+    }
+
+    function salvarCategoria(e) {
+      e.preventDefault();
+      const id = document.getElementById('cat-edit-id').value;
+      const nome = document.getElementById('cat-nome').value.trim();
+      if (!nome) return;
+
+      if (id) {
+        const cat = categorias.find(c => c.id === id);
+        if (cat) cat.nome = nome;
+      } else {
+        categorias.push({ id: "cat_" + Date.now(), nome });
+      }
+      persistir();
+      fecharModal('modal-categoria');
+      e.target.reset();
+    }
+
+    function removerCategoria(catId) {
+      if (confirm("Deseja remover esta categoria? Os atalhos associados a ela também serão excluídos.")) {
+        categorias = categorias.filter(c => c.id !== catId);
+        paineis = paineis.filter(p => p.categoriaId !== catId);
+        persistir();
+      }
+    }
+
+    /* Gestão de Painéis */
+    function preencherSelectCategorias(selectedId = '') {
+      const select = document.getElementById('p-categoria');
+      select.innerHTML = '';
+      categorias.forEach(cat => {
+        const sel = cat.id === selectedId ? 'selected' : '';
+        select.innerHTML += `<option value="${cat.id}" ${sel}>${cat.nome}</option>`;
+      });
+    }
+
+    function abrirModalNovoPainel() {
+      if (categorias.length === 0) {
+        alert("Crie pelo menos uma categoria antes de adicionar um painel.");
+        abrirModalNovaCategoria();
+        return;
+      }
+      document.getElementById('p-edit-id').value = '';
+      document.getElementById('p-nome').value = '';
+      document.getElementById('p-desc').value = '';
+      document.getElementById('p-url').value = '';
+      document.getElementById('p-logo').value = '';
+      document.getElementById('panel-modal-title').innerText = "Adicionar Novo Painel";
+      preencherSelectCategorias();
+      abrirModal('modal-painel');
+    }
+
+    function editarPainel(id) {
+      const p = paineis.find(item => item.id === id);
+      if (!p) return;
+      document.getElementById('p-edit-id').value = p.id;
+      document.getElementById('p-nome').value = p.nome;
+      document.getElementById('p-desc').value = p.desc;
+      document.getElementById('p-url').value = p.url;
+      document.getElementById('p-logo').value = p.logo || '';
+      document.getElementById('panel-modal-title').innerText = "Editar Painel";
+      preencherSelectCategorias(p.categoriaId);
+      abrirModal('modal-painel');
+    }
+
+    function salvarPainel(e) {
+      e.preventDefault();
+      const id = document.getElementById('p-edit-id').value;
+      const categoriaId = document.getElementById('p-categoria').value;
+      const nome = document.getElementById('p-nome').value.trim();
+      const desc = document.getElementById('p-desc').value.trim() || "Atalho";
+      const url = document.getElementById('p-url').value.trim();
+      const logo = document.getElementById('p-logo').value.trim();
+
+      if (id) {
+        const p = paineis.find(item => item.id === Number(id));
+        if (p) {
+          p.categoriaId = categoriaId;
+          p.nome = nome;
+          p.desc = desc;
+          p.url = url;
+          p.logo = logo;
+        }
+      } else {
+        paineis.push({
+          id: Date.now(),
+          categoriaId,
+          nome,
+          desc,
+          url,
+          logo,
+          favorito: false
+        });
+      }
+      persistir();
+      fecharModal('modal-painel');
+      e.target.reset();
+    }
+
+    function removerPainel(id) {
+      if (confirm("Pretende remover este painel?")) {
+        paineis = paineis.filter(p => p.id !== id);
+        persistir();
+      }
+    }
+
+    function alternarFavorito(id) {
+      const p = paineis.find(item => item.id === id);
+      if (p) {
+        p.favorito = !p.favorito;
+        persistir();
+      }
+    }
+
+    function extrairDominio(url) {
+      try { return new URL(url).hostname; } catch { return ''; }
+    }
+
+    function renderizarIcone(p) {
+      if (p.logo) {
+        if (p.logo.startsWith('fa-') || p.logo.startsWith('fas ') || p.logo.startsWith('fa-solid') || p.logo.startsWith('fa-brands')) {
+          return `<i class="${p.logo}"></i>`;
+        }
+        return `<img src="${p.logo}" alt="Logo" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\\'fa-solid fa-globe\\\'></i>';">`;
+      }
+      const dom = extrairDominio(p.url);
+      if (dom) {
+        return `<img src="https://www.google.com/s2/favicons?domain=${dom}&sz=64" alt="Icon" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\\\'fa-solid fa-tv\\\'></i>';">`;
+      }
+      return `<i class="fa-solid fa-tv"></i>`;
+    }
+
+    function gerarCardHTML(p) {
+      const favClass = p.favorito ? 'is-fav' : '';
+      const favIcon = p.favorito ? 'fa-solid fa-star' : 'fa-regular fa-star';
+      return `
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-icon-box">${renderizarIcone(p)}</div>
+            <div class="panel-info">
+              <div class="panel-name" title="${p.nome}">${p.nome}</div>
+              <div class="panel-desc" title="${p.desc}">${p.desc}</div>
+            </div>
+            <div class="panel-ctrls">
+              <button class="btn-card-ctrl fav-btn ${favClass}" onclick="alternarFavorito(${p.id})" title="Favorito"><i class="${favIcon}"></i></button>
+              <button class="btn-card-ctrl" onclick="editarPainel(${p.id})" title="Editar"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn-card-ctrl del" onclick="removerPainel(${p.id})" title="Excluir"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+          </div>
+          <div class="panel-links">
+            <a href="${p.url}" target="_blank" class="btn-open"><i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar</a>
+          </div>
+        </div>
+      `;
+    }
+
+    function ordenarLista(lista) {
+      if (modoOrdem === 1) {
+        return [...lista].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+      } else if (modoOrdem === 2) {
+        return [...lista].sort((a, b) => b.nome.localeCompare(a.nome, 'pt-BR', { sensitivity: 'base' }));
+      }
+      return lista;
+    }
+
+    function renderizarTudo() {
+      const btnOrdem = document.getElementById('btn-ordem');
+      if (modoOrdem === 1) {
+        btnOrdem.classList.add('active-sort');
+        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-a-z"></i> <span id="lbl-ordem">A-Z</span>';
+      } else if (modoOrdem === 2) {
+        btnOrdem.classList.add('active-sort');
+        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-z-a"></i> <span id="lbl-ordem">Z-A</span>';
+      } else {
+        btnOrdem.classList.remove('active-sort');
+        btnOrdem.innerHTML = '<i class="fa-solid fa-arrow-down-short-wide"></i> <span id="lbl-ordem">Padrão</span>';
+      }
+
+      const container = document.getElementById('main-content');
+      container.innerHTML = '';
+
+      const paineisFiltrados = paineis.filter(p => {
+        if (!termoBusca) return true;
+        return p.nome.toLowerCase().includes(termoBusca) || p.desc.toLowerCase().includes(termoBusca);
+      });
+
+      // Seção Especial: Favoritos
+      const favoritos = ordenarLista(paineisFiltrados.filter(p => p.favorito));
+      if (favoritos.length > 0) {
+        let favCards = favoritos.map(p => gerarCardHTML(p)).join('');
+        container.innerHTML += `
+          <div class="category-group fav-group">
+            <div class="category-header">
+              <div class="category-title"><i class="fa-solid fa-star"></i> Meus Favoritos</div>
+            </div>
+            <div class="grid-cards">${favCards}</div>
+          </div>
+        `;
+      }
+
+      if (categorias.length === 0) {
+        container.innerHTML += `
+          <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <p>Nenhuma categoria encontrada. Clique em <strong>Categoria</strong> acima para começar.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let encontrouAlgum = favoritos.length > 0;
+
+      categorias.forEach(cat => {
+        let itens = ordenarLista(paineisFiltrados.filter(p => p.categoriaId === cat.id));
+
+        if (termoBusca && itens.length === 0) return;
+
+        encontrouAlgum = true;
+        let cardsHtml = '';
+        if (itens.length === 0) {
+          cardsHtml = `<div style="grid-column: 1/-1; font-size: 13px; color: var(--text-muted);">Nenhum atalho cadastrado nesta categoria.</div>`;
+        } else {
+          cardsHtml = itens.map(p => gerarCardHTML(p)).join('');
+        }
+
+        container.innerHTML += `
+          <div class="category-group">
+            <div class="category-header">
+              <div class="category-title"><i class="fa-solid fa-folder-open"></i> ${cat.nome}</div>
+              <div class="cat-actions">
+                <button class="btn-cat-tool" onclick="editarCategoria('${cat.id}')" title="Renomear Categoria"><i class="fa-solid fa-pen"></i> Renomear</button>
+                <button class="btn-cat-tool del" onclick="removerCategoria('${cat.id}')" title="Excluir Categoria"><i class="fa-solid fa-trash-can"></i> Excluir</button>
+              </div>
+            </div>
+            <div class="grid-cards">${cardsHtml}</div>
+          </div>
+        `;
+      });
+
+      if (!encontrouAlgum && termoBusca) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
+            <i class="fa-solid fa-magnifying-glass" style="font-size: 32px; margin-bottom: 12px; display: block; opacity: 0.5;"></i>
+            <p>Nenhum painel encontrado para "<strong>${termoBusca}</strong>".</p>
+          </div>
+        `;
+      }
+    }
+
+    // Inicializa os estilos e temas salvos
+    aplicarEstilosConfig();
+  </script>
+</body>
+</html>
